@@ -1,4 +1,5 @@
 using System.Text.Json;
+using TestVue.Server.Configuration;
 using TestVue.Server.Helper;
 using TestVue.Server.Models;
 using TestVue.Server.Stores.FormSubmission;
@@ -23,7 +24,7 @@ namespace TestVue.Server.Services.FormSubmission
                 Id = Guid.NewGuid(),
                 FormData = data.ToDictionary(
                     kvp => kvp.Key,
-                    kvp => JsonSerializer.SerializeToElement(kvp.Value)
+                    kvp => JsonSerializer.SerializeToElement(kvp.Value, JsonConfiguration.DefaultOptions)
                 ),
                 SubmittedAt = DateTime.UtcNow
             };

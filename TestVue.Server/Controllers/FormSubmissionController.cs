@@ -29,11 +29,33 @@ namespace TestVue.Server.Controllers
         {
             try
             {
+                // Validate input
+                if (formData.ValueKind == JsonValueKind.Undefined || 
+                    formData.ValueKind == JsonValueKind.Null)
+                {
+                    return BadRequest(new { message = "Form data is required" });
+                }
+
+                if (formData.ValueKind != JsonValueKind.Object)
+                {
+                    return BadRequest(new { message = "Form data must be a valid JSON object" });
+                }
+
                 var submissionId = await _formSubmissionService.AddAsync(formData);
 
                 _logger.LogInformation("Form submission created with ID: {SubmissionId}", submissionId);
 
                 return Ok(new { id = submissionId, message = "Form submitted successfully" });
+            }
+            catch (JsonException jsonEx)
+            {
+                _logger.LogWarning(jsonEx, "Invalid JSON format in form submission");
+                return BadRequest(new { message = "Invalid JSON format", details = jsonEx.Message });
+            }
+            catch (ArgumentException argEx)
+            {
+                _logger.LogWarning(argEx, "Invalid argument in form submission");
+                return BadRequest(new { message = argEx.Message });
             }
             catch (Exception ex)
             {

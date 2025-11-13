@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TestVue.Server.Configuration;
 using TestVue.Server.Models;
 
 namespace TestVue.Server.Data
@@ -22,8 +23,8 @@ namespace TestVue.Server.Data
                 entity.Property(e => e.SubmittedAt).IsRequired();
                 entity.Property(e => e.FormData)
                     .HasConversion(
-                        v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
-                        v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new Dictionary<string, System.Text.Json.JsonElement>()
+                        v => System.Text.Json.JsonSerializer.Serialize(v, JsonConfiguration.DefaultOptions),
+                        v => System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, System.Text.Json.JsonElement>>(v, JsonConfiguration.DefaultOptions) ?? new Dictionary<string, System.Text.Json.JsonElement>()
                     );
             });
         }
