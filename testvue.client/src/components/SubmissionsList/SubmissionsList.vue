@@ -39,7 +39,8 @@
 <script setup lang="ts">
     import { ref, computed, onMounted } from 'vue';
     import { useToast } from 'vue-toast-notification';
-    import { BOOLEAN_DISPLAY, formatBooleanValue } from '../../constants/booleanDisplay';
+    import { formatDate, formatFieldName, formatFieldValue } from '../../utils/formatters';
+    import { formatBooleanValue } from '../../constants/booleanDisplay';
 
     interface Submission {
         id: string;
@@ -50,8 +51,31 @@
     const submissions = ref<Submission[]>([]);
     const searchQuery = ref('');
     const loading = ref(false);
-
     const $toast = useToast();
+
+    const loadSubmissions = async () => {
+        loading.value = true;
+        try {
+            const response = await fetch('/api/formsubmission');
+            if (response.ok) {
+                submissions.value = await response.json();
+            } else {
+                console.error('Error to load submissions:', response);
+                $toast.error('Failed to load submissions. Please try again.', {
+                    position: 'top',
+                    duration: 5000
+                });
+            }
+        } catch (error) {
+            console.error('Error loading submissions:', error);
+            $toast.error('An error occurred while loading submissions. Please try again.', {
+                position: 'top',
+                duration: 5000
+            });
+        } finally {
+            loading.value = false;
+        }
+    };
 
     const filteredSubmissions = computed(() => {
         if (!searchQuery.value.trim()) {
@@ -84,54 +108,6 @@
             });
         });
     });
-
-    const loadSubmissions = async () => {
-        loading.value = true;
-        try {
-            const response = await fetch('/api/formsubmission');
-            if (response.ok) {
-                submissions.value = await response.json();
-            } else {
-                $toast.error('Failed to load submissions. Please try again.', {
-                    position: 'top',
-                    duration: 5000
-                });
-            }
-        } catch (error) {
-            console.error('Error loading submissions:', error);
-            $toast.error('An error occurred while loading submissions. Please try again.', {
-                position: 'top',
-                duration: 5000
-            });
-        } finally {
-            loading.value = false;
-        }
-    };
-
-    const formatDate = (dateString: string): string => {
-        const date = new Date(dateString);
-        return date.toLocaleString();
-    };
-
-    const formatFieldName = (key: string): string => {
-        // Convert camelCase to Title Case
-        return key
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, str => str.toUpperCase());
-    };
-
-    const formatFieldValue = (value: any): string => {
-        if (value === null || value === undefined) {
-            return 'N/A';
-        }
-        if (typeof value === 'boolean') {
-            return formatBooleanValue(value);
-        }
-        if (Array.isArray(value)) {
-            return value.length > 0 ? value.join(', ') : 'None';
-        }
-        return String(value);
-    };
 
     onMounted(() => {
         loadSubmissions();
