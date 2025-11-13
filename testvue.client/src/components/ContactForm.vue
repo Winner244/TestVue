@@ -114,150 +114,149 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+    import { reactive, ref } from 'vue';
+    import '../assets/styles/contact-form.less'
 
-const formData = reactive({
-    fullName: '',
-    email: '',
-    subject: '',
-    contactDate: '',
-    contactMethod: '',
-    interests: [] as string[],
-    message: '',
-    newsletter: false,
-    formType: 'contact' // To identify this form type in backend
-});
+    const formData = reactive({
+        fullName: '',
+        email: '',
+        subject: '',
+        contactDate: '',
+        contactMethod: '',
+        interests: [] as string[],
+        message: '',
+        newsletter: false,
+        formType: 'contact' // To identify this form type in backend
+    });
 
-const errors = reactive({
-    fullName: '',
-    email: '',
-    subject: '',
-    contactDate: '',
-    contactMethod: '',
-    message: ''
-});
+    const errors = reactive({
+        fullName: '',
+        email: '',
+        subject: '',
+        contactDate: '',
+        contactMethod: '',
+        message: ''
+    });
 
-const isSubmitting = ref(false);
-const successMessage = ref('');
+    const isSubmitting = ref(false);
+    const successMessage = ref('');
 
-const validateField = (field: string) => {
-    switch (field) {
-        case 'fullName':
-            if (!formData.fullName.trim()) {
-                errors.fullName = 'Full name is required';
-            } else if (formData.fullName.trim().length < 2) {
-                errors.fullName = 'Full name must be at least 2 characters';
-            } else {
-                errors.fullName = '';
-            }
-            break;
-
-        case 'email':
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!formData.email.trim()) {
-                errors.email = 'Email is required';
-            } else if (!emailRegex.test(formData.email)) {
-                errors.email = 'Please enter a valid email address';
-            } else {
-                errors.email = '';
-            }
-            break;
-
-        case 'subject':
-            if (!formData.subject) {
-                errors.subject = 'Please select a subject';
-            } else {
-                errors.subject = '';
-            }
-            break;
-
-        case 'contactDate':
-            if (!formData.contactDate) {
-                errors.contactDate = 'Please select a date';
-            } else {
-                const selectedDate = new Date(formData.contactDate);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                if (selectedDate < today) {
-                    errors.contactDate = 'Date cannot be in the past';
+    const validateField = (field: string) => {
+        switch (field) {
+            case 'fullName':
+                if (!formData.fullName.trim()) {
+                    errors.fullName = 'Full name is required';
+                } else if (formData.fullName.trim().length < 2) {
+                    errors.fullName = 'Full name must be at least 2 characters';
                 } else {
-                    errors.contactDate = '';
+                    errors.fullName = '';
                 }
-            }
-            break;
+                break;
 
-        case 'contactMethod':
-            if (!formData.contactMethod) {
-                errors.contactMethod = 'Please select a contact method';
-            } else {
-                errors.contactMethod = '';
-            }
-            break;
+            case 'email':
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!formData.email.trim()) {
+                    errors.email = 'Email is required';
+                } else if (!emailRegex.test(formData.email)) {
+                    errors.email = 'Please enter a valid email address';
+                } else {
+                    errors.email = '';
+                }
+                break;
 
-        case 'message':
-            if (!formData.message.trim()) {
-                errors.message = 'Message is required';
-            } else if (formData.message.trim().length < 10) {
-                errors.message = 'Message must be at least 10 characters';
-            } else {
-                errors.message = '';
-            }
-            break;
-    }
-};
+            case 'subject':
+                if (!formData.subject) {
+                    errors.subject = 'Please select a subject';
+                } else {
+                    errors.subject = '';
+                }
+                break;
 
-const validateForm = (): boolean => {
-    validateField('fullName');
-    validateField('email');
-    validateField('subject');
-    validateField('contactDate');
-    validateField('contactMethod');
-    validateField('message');
+            case 'contactDate':
+                if (!formData.contactDate) {
+                    errors.contactDate = 'Please select a date';
+                } else {
+                    const selectedDate = new Date(formData.contactDate);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (selectedDate < today) {
+                        errors.contactDate = 'Date cannot be in the past';
+                    } else {
+                        errors.contactDate = '';
+                    }
+                }
+                break;
 
-    return !Object.values(errors).some(error => error !== '');
-};
+            case 'contactMethod':
+                if (!formData.contactMethod) {
+                    errors.contactMethod = 'Please select a contact method';
+                } else {
+                    errors.contactMethod = '';
+                }
+                break;
 
-const handleSubmit = async () => {
-    if (!validateForm()) {
-        return;
-    }
-
-    isSubmitting.value = true;
-    successMessage.value = '';
-
-    try {
-        const response = await fetch('/api/formsubmission', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-            successMessage.value = 'Form submitted successfully!';
-            // Reset form
-            Object.assign(formData, {
-                fullName: '',
-                email: '',
-                subject: '',
-                contactDate: '',
-                contactMethod: '',
-                interests: [],
-                message: '',
-                newsletter: false,
-                formType: 'contact'
-            });
-        } else {
-            alert('Failed to submit form. Please try again.');
+            case 'message':
+                if (!formData.message.trim()) {
+                    errors.message = 'Message is required';
+                } else if (formData.message.trim().length < 10) {
+                    errors.message = 'Message must be at least 10 characters';
+                } else {
+                    errors.message = '';
+                }
+                break;
         }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('An error occurred. Please try again.');
-    } finally {
-        isSubmitting.value = false;
-    }
-};
-</script>
+    };
 
-<!-- styles moved to `src/assets/styles/contact-form.less` -->
+    const validateForm = (): boolean => {
+        validateField('fullName');
+        validateField('email');
+        validateField('subject');
+        validateField('contactDate');
+        validateField('contactMethod');
+        validateField('message');
+
+        return !Object.values(errors).some(error => error !== '');
+    };
+
+    const handleSubmit = async () => {
+        if (!validateForm()) {
+            return;
+        }
+
+        isSubmitting.value = true;
+        successMessage.value = '';
+
+        try {
+            const response = await fetch('/api/formsubmission', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                successMessage.value = 'Form submitted successfully!';
+                // Reset form
+                Object.assign(formData, {
+                    fullName: '',
+                    email: '',
+                    subject: '',
+                    contactDate: '',
+                    contactMethod: '',
+                    interests: [],
+                    message: '',
+                    newsletter: false,
+                    formType: 'contact'
+                });
+            } else {
+                alert('Failed to submit form. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            isSubmitting.value = false;
+        }
+    };
+</script>

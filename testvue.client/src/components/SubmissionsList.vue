@@ -48,89 +48,88 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
+    import '../assets/styles/submissions-list.less'
 
-interface Submission {
-  id: string;
-  formData: Record<string, any>;
-  submittedAt: string;
-}
-
-const submissions = ref<Submission[]>([]);
-const searchQuery = ref('');
-const loading = ref(false);
-
-const filteredSubmissions = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return submissions.value;
-  }
-
-  const query = searchQuery.value.toLowerCase();
-  return submissions.value.filter(submission => {
-    // Search in ID
-    if (submission.id.toLowerCase().includes(query)) {
-      return true;
+    interface Submission {
+    id: string;
+    formData: Record<string, any>;
+    submittedAt: string;
     }
 
-    // Search in form data values
-    return Object.values(submission.formData).some(value => {
-      if (typeof value === 'string') {
-        return value.toLowerCase().includes(query);
-      }
-      if (Array.isArray(value)) {
-        return value.some(item => 
-          typeof item === 'string' && item.toLowerCase().includes(query)
-        );
-      }
-      return false;
+    const submissions = ref<Submission[]>([]);
+    const searchQuery = ref('');
+    const loading = ref(false);
+
+    const filteredSubmissions = computed(() => {
+    if (!searchQuery.value.trim()) {
+        return submissions.value;
+    }
+
+    const query = searchQuery.value.toLowerCase();
+    return submissions.value.filter(submission => {
+        // Search in ID
+        if (submission.id.toLowerCase().includes(query)) {
+        return true;
+        }
+
+        // Search in form data values
+        return Object.values(submission.formData).some(value => {
+        if (typeof value === 'string') {
+            return value.toLowerCase().includes(query);
+        }
+        if (Array.isArray(value)) {
+            return value.some(item => 
+            typeof item === 'string' && item.toLowerCase().includes(query)
+            );
+        }
+        return false;
+        });
     });
-  });
-});
+    });
 
-const loadSubmissions = async () => {
-  loading.value = true;
-  try {
-    const response = await fetch('/api/formsubmission');
-    if (response.ok) {
-      submissions.value = await response.json();
-    } else {
-      console.error('Failed to load submissions');
+    const loadSubmissions = async () => {
+    loading.value = true;
+    try {
+        const response = await fetch('/api/formsubmission');
+        if (response.ok) {
+        submissions.value = await response.json();
+        } else {
+        console.error('Failed to load submissions');
+        }
+    } catch (error) {
+        console.error('Error loading submissions:', error);
+    } finally {
+        loading.value = false;
     }
-  } catch (error) {
-    console.error('Error loading submissions:', error);
-  } finally {
-    loading.value = false;
-  }
-};
+    };
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return date.toLocaleString();
-};
+    const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+    };
 
-const formatFieldName = (key: string): string => {
-  // Convert camelCase to Title Case
-  return key
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, str => str.toUpperCase());
-};
+    const formatFieldName = (key: string): string => {
+    // Convert camelCase to Title Case
+    return key
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, str => str.toUpperCase());
+    };
 
-const formatFieldValue = (value: any): string => {
-  if (value === null || value === undefined) {
-    return 'N/A';
-  }
-  if (typeof value === 'boolean') {
-    return value ? 'Yes' : 'No';
-  }
-  if (Array.isArray(value)) {
-    return value.length > 0 ? value.join(', ') : 'None';
-  }
-  return String(value);
-};
+    const formatFieldValue = (value: any): string => {
+    if (value === null || value === undefined) {
+        return 'N/A';
+    }
+    if (typeof value === 'boolean') {
+        return value ? 'Yes' : 'No';
+    }
+    if (Array.isArray(value)) {
+        return value.length > 0 ? value.join(', ') : 'None';
+    }
+    return String(value);
+    };
 
-onMounted(() => {
-  loadSubmissions();
-});
+    onMounted(() => {
+    loadSubmissions();
+    });
 </script>
-
-<!-- styles moved to `src/assets/styles/submissions-list.less` -->

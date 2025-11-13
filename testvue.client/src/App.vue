@@ -4,6 +4,7 @@
     import ContactForm from './components/ContactForm.vue';
     import OrderForm from './components/OrderForm.vue';
     import SubmissionsList from './components/SubmissionsList.vue';
+    import './assets/styles/app.less'
 
     const activeTab = ref<'contact' | 'order' | 'submissions'>('contact');
 </script>

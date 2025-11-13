@@ -170,141 +170,140 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+    import { reactive, ref } from 'vue';
+    import '../assets/styles/order-form.less'
 
-const formData = reactive({
-  productName: '',
-  quantity: 1,
-  category: '',
-  deliveryDate: '',
-  paymentMethod: '',
-  additionalServices: [] as string[],
-  specialInstructions: '',
-  agreeToTerms: false,
-  formType: 'order' // Different form type identifier
-});
-
-const errors = reactive({
-  productName: '',
-  quantity: '',
-  category: '',
-  deliveryDate: '',
-  paymentMethod: '',
-  agreeToTerms: ''
-});
-
-const isSubmitting = ref(false);
-const successMessage = ref('');
-
-const validateField = (field: string) => {
-  switch (field) {
-    case 'productName':
-      if (!formData.productName.trim()) {
-        errors.productName = 'Product name is required';
-      } else {
-        errors.productName = '';
-      }
-      break;
-
-    case 'quantity':
-      if (!formData.quantity || formData.quantity < 1) {
-        errors.quantity = 'Quantity must be at least 1';
-      } else {
-        errors.quantity = '';
-      }
-      break;
-
-    case 'category':
-      if (!formData.category) {
-        errors.category = 'Please select a category';
-      } else {
-        errors.category = '';
-      }
-      break;
-
-    case 'deliveryDate':
-      if (!formData.deliveryDate) {
-        errors.deliveryDate = 'Please select a delivery date';
-      } else {
-        const selectedDate = new Date(formData.deliveryDate);
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        if (selectedDate < tomorrow) {
-          errors.deliveryDate = 'Delivery date must be at least tomorrow';
-        } else {
-          errors.deliveryDate = '';
-        }
-      }
-      break;
-
-    case 'paymentMethod':
-      if (!formData.paymentMethod) {
-        errors.paymentMethod = 'Please select a payment method';
-      } else {
-        errors.paymentMethod = '';
-      }
-      break;
-  }
-};
-
-const validateForm = (): boolean => {
-  validateField('productName');
-  validateField('quantity');
-  validateField('category');
-  validateField('deliveryDate');
-  validateField('paymentMethod');
-
-  if (!formData.agreeToTerms) {
-    errors.agreeToTerms = 'You must agree to the terms and conditions';
-  } else {
-    errors.agreeToTerms = '';
-  }
-
-  return !Object.values(errors).some(error => error !== '');
-};
-
-const handleSubmit = async () => {
-  if (!validateForm()) {
-    return;
-  }
-
-  isSubmitting.value = true;
-  successMessage.value = '';
-
-  try {
-    const response = await fetch('/api/formsubmission', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
+    const formData = reactive({
+    productName: '',
+    quantity: 1,
+    category: '',
+    deliveryDate: '',
+    paymentMethod: '',
+    additionalServices: [] as string[],
+    specialInstructions: '',
+    agreeToTerms: false,
+    formType: 'order' // Different form type identifier
     });
 
-    if (response.ok) {
-      successMessage.value = 'Order placed successfully!';
-      // Reset form
-      Object.assign(formData, {
-        productName: '',
-        quantity: 1,
-        category: '',
-        deliveryDate: '',
-        paymentMethod: '',
-        additionalServices: [],
-        specialInstructions: '',
-        agreeToTerms: false,
-        formType: 'order'
-      });
-    } else {
-      alert('Failed to place order. Please try again.');
-    }
-  } catch (error) {
-    console.error('Error placing order:', error);
-    alert('An error occurred. Please try again.');
-  } finally {
-    isSubmitting.value = false;
-  }
-};
-</script>
+    const errors = reactive({
+    productName: '',
+    quantity: '',
+    category: '',
+    deliveryDate: '',
+    paymentMethod: '',
+    agreeToTerms: ''
+    });
 
-<!-- styles moved to `src/assets/styles/order-form.less` -->
+    const isSubmitting = ref(false);
+    const successMessage = ref('');
+
+    const validateField = (field: string) => {
+    switch (field) {
+        case 'productName':
+        if (!formData.productName.trim()) {
+            errors.productName = 'Product name is required';
+        } else {
+            errors.productName = '';
+        }
+        break;
+
+        case 'quantity':
+        if (!formData.quantity || formData.quantity < 1) {
+            errors.quantity = 'Quantity must be at least 1';
+        } else {
+            errors.quantity = '';
+        }
+        break;
+
+        case 'category':
+        if (!formData.category) {
+            errors.category = 'Please select a category';
+        } else {
+            errors.category = '';
+        }
+        break;
+
+        case 'deliveryDate':
+        if (!formData.deliveryDate) {
+            errors.deliveryDate = 'Please select a delivery date';
+        } else {
+            const selectedDate = new Date(formData.deliveryDate);
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            if (selectedDate < tomorrow) {
+            errors.deliveryDate = 'Delivery date must be at least tomorrow';
+            } else {
+            errors.deliveryDate = '';
+            }
+        }
+        break;
+
+        case 'paymentMethod':
+        if (!formData.paymentMethod) {
+            errors.paymentMethod = 'Please select a payment method';
+        } else {
+            errors.paymentMethod = '';
+        }
+        break;
+    }
+    };
+
+    const validateForm = (): boolean => {
+    validateField('productName');
+    validateField('quantity');
+    validateField('category');
+    validateField('deliveryDate');
+    validateField('paymentMethod');
+
+    if (!formData.agreeToTerms) {
+        errors.agreeToTerms = 'You must agree to the terms and conditions';
+    } else {
+        errors.agreeToTerms = '';
+    }
+
+    return !Object.values(errors).some(error => error !== '');
+    };
+
+    const handleSubmit = async () => {
+    if (!validateForm()) {
+        return;
+    }
+
+    isSubmitting.value = true;
+    successMessage.value = '';
+
+    try {
+        const response = await fetch('/api/formsubmission', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+        successMessage.value = 'Order placed successfully!';
+        // Reset form
+        Object.assign(formData, {
+            productName: '',
+            quantity: 1,
+            category: '',
+            deliveryDate: '',
+            paymentMethod: '',
+            additionalServices: [],
+            specialInstructions: '',
+            agreeToTerms: false,
+            formType: 'order'
+        });
+        } else {
+        alert('Failed to place order. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error placing order:', error);
+        alert('An error occurred. Please try again.');
+    } finally {
+        isSubmitting.value = false;
+    }
+    };
+</script>

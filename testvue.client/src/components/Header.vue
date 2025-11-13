@@ -1,15 +1,17 @@
 <script setup lang="ts">
-defineProps<{
-  activeTab: 'contact' | 'order' | 'submissions';
-}>();
+    import '../assets/styles/header.less'
 
-const emit = defineEmits<{
-  (e: 'update:activeTab', value: 'contact' | 'order' | 'submissions'): void;
-}>();
+    defineProps<{
+        activeTab: 'contact' | 'order' | 'submissions';
+    }>();
 
-const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
-  emit('update:activeTab', tab);
-};
+    const emit = defineEmits<{
+        (e: 'update:activeTab', value: 'contact' | 'order' | 'submissions'): void;
+    }>();
+
+    const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
+        emit('update:activeTab', tab);
+    };
 </script>
 
 <template>
@@ -20,7 +22,7 @@ const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
         @click="handleTabClick('contact')"
         :class="['header__tab', { 'header__tab--active': activeTab === 'contact' }]"
       >
-        Contat Form
+        Contact Form
       </button>
       <button
         @click="handleTabClick('order')"
