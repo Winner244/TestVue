@@ -1,48 +1,188 @@
-# testvue.client
+# TestVue Client - Vue 3 + TypeScript + ASP.NET Core
 
-This template should help get you started developing with Vue 3 in Vite.
+A modern, production-ready Vue 3 application demonstrating best practices in frontend development, built with TypeScript, Zod validation, and comprehensive testing.
+
+## 🚀 Features
+
+- ✅ **Vue 3 Composition API** - Modern reactive state management with `<script setup>`
+- ✅ **TypeScript** - Full type safety across the application
+- ✅ **Zod Validation** - Runtime type-safe schema validation
+- ✅ **Accessibility** - WCAG compliant with ARIA labels and semantic HTML
+- ✅ **Testing** - Comprehensive test suite with Vitest and Vue Test Utils
+- ✅ **Performance Optimized** - Lazy loading, debouncing, and skeleton loaders
+- ✅ **BEM Methodology** - Maintainable and scalable CSS architecture
+- ✅ **Composables Pattern** - Reusable logic with custom composables
+- ✅ **Toast Notifications** - Non-intrusive user feedback
+- ✅ **Environment Configuration** - Separate dev/prod configurations
+
+## 📋 Prerequisites
+
+- Node.js: `^20.19.0` or `>=22.12.0`
+- npm or yarn
+- ASP.NET Core 8.0 (for backend API)
+
+## 🛠️ Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd TestVue/testvue.client
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   
+   Environment variables are in `.env`, `.env.development`, and `.env.production` files.
+
+## 🎯 Available Scripts
+
+### Development
+```bash
+npm run dev          # Start development server with hot-reload
+npm run build        # Build for production
+npm run preview      # Preview production build locally
+```
+
+### Code Quality
+```bash
+npm run lint         # Run ESLint with auto-fix
+npm run type-check   # Run TypeScript type checking
+```
+
+### Testing
+```bash
+npm test             # Run tests in watch mode
+npm run test:ui      # Open Vitest UI for interactive testing
+npm run test:coverage # Generate coverage report
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── assets/styles/       # Global styles (Less with BEM)
+├── components/          # Vue components (co-located .vue + .less)
+│   ├── ContactForm/     # Multi-field form with validation
+│   ├── Header/          # Navigation header
+│   ├── SkeletonLoader/  # Loading placeholder component
+│   └── SubmissionsList/ # Data table with search
+├── composables/         # Reusable composition functions
+│   ├── useForm.ts       # Form management
+│   ├── useSubmissions.ts # Data fetching
+│   └── useDebounce.ts   # Debounce utility
+├── config/              # Configuration
+│   └── env.ts           # Environment variables
+├── constants/           # Application constants
+│   └── booleanDisplay.ts
+├── utils/               # Utility functions
+│   └── formatters.ts    # Data formatting
+├── tests/               # Test files
+├── App.vue              # Root component
+└── main.ts              # Entry point
+```
+
+## 🎨 Architecture Highlights
+
+### Component Organization
+- Co-located styles using BEM methodology
+- TypeScript for type safety
+- Proper props/emits typing
+
+### State Management
+- Reactive state with `ref()` and `reactive()`
+- Composables for shared logic
+- No global state library needed for this app size
+
+### Styling
+- **Less preprocessor** with BEM naming (Block__Element--Modifier)
+- Scoped styles per component
+- Global variables for consistency
+
+### Validation
+- **Zod schemas** for runtime validation
+- Type inference with `z.infer<typeof schema>`
+- Real-time error messages
+
+## 📦 Key Components
+
+### ContactForm
+Multi-field form with Zod validation, ARIA attributes, and toast notifications.
+
+### SubmissionsList
+Lazy-loaded data table with debounced search and skeleton loaders.
+
+### SkeletonLoader
+Reusable loading placeholder with animated shimmer effect.
+
+## 🔧 Composables
+
+- **`useForm`** - Form state, validation, and submission management
+- **`useSubmissions`** - Data fetching and management
+- **`useDebounce`** - Debounce reactive values
+
+## ♿ Accessibility
+
+- ARIA labels on all interactive elements
+- Semantic HTML (header, main, nav, article)
+- Live regions for dynamic content
+- Keyboard navigation support
+- Error associations with `aria-describedby`
+
+## 🧪 Testing
+
+40+ tests covering components, validation, filtering, and utilities.
+
+```bash
+npm test              # Run tests
+npm run test:coverage # Coverage report
+```
+
+## 🌐 API Integration
+
+- `POST /api/formsubmission` - Submit form data
+- `GET /api/formsubmission` - Fetch all submissions
+
+API base URL configured via environment variables in `src/config/env.ts`.
+
+## 🎯 Best Practices Implemented
+
+1. Composition API with `<script setup>`
+2. TypeScript type safety
+3. Zod runtime validation
+4. Composables for code reuse
+5. Lazy loading for performance
+6. Debouncing for optimization
+7. Skeleton loaders for UX
+8. WCAG accessibility compliance
+9. BEM CSS methodology
+10. Comprehensive testing
+11. Environment configuration
+12. Toast notifications
+13. Error handling
+14. Semantic HTML
+
+## 🚀 Performance Optimizations
+
+- Code splitting with dynamic imports
+- Lazy loading with `defineAsyncComponent`
+- Debounced search (300ms)
+- Computed properties for expensive operations
+- Suspense for async components
+- Skeleton loaders
 
 ## Recommended IDE Setup
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin)
 
-## Recommended Browser Setup
+## Recommended Browser Extensions
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **Chrome/Edge**: [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+- **Firefox**: [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+**Built with** ❤️ **using Vue 3, TypeScript, and Modern Web Standards**

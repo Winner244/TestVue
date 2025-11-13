@@ -21,7 +21,17 @@
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="submissions__status" role="status" aria-live="polite" aria-busy="true">Loading submissions...</div>
+        <div v-if="loading" class="submissions__loading" role="status" aria-live="polite" aria-busy="true">
+            <Loading 
+                :active="loading" 
+                :is-full-page="false"
+                loader="spinner"
+                color="#42b983"
+                :width="64"
+                :height="64"
+                background-color="transparent" />
+            <p class="submissions__loading-text">Loading submissions...</p>
+        </div>
 
         <!-- No Results -->
         <div v-else-if="filteredSubmissions.length === 0" class="submissions__status" role="status" aria-live="polite">
@@ -53,6 +63,8 @@
     import { formatDate, formatFieldName, formatFieldValue } from '../../utils/formatters';
     import { formatBooleanValue } from '../../constants/booleanDisplay';
     import { useSubmissions } from '../../composables/useSubmissions';
+    import Loading from 'vue-loading-overlay';
+    import 'vue-loading-overlay/dist/css/index.css';
 
     interface Submission {
         id: string;

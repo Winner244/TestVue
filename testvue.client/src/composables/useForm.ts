@@ -1,5 +1,5 @@
-import { reactive, ref } from 'vue';
-import { z, ZodSchema } from 'zod';
+import { reactive, ref, toRaw } from 'vue';
+import { z, type ZodSchema } from 'zod';
 import { useToast } from 'vue-toast-notification';
 
 /**
@@ -17,31 +17,31 @@ export function useForm<T extends Record<string, any>>(
 ) {
     const $toast = useToast();
     const formData = reactive<T>({ ...initialData });
-    const errors = reactive<Partial<Record<keyof T, string>>>({});
+    const errors = reactive<Record<string, string>>({});
     const isSubmitting = ref(false);
     const isDirty = ref(false);
 
     /**
      * Clear error for a specific field
      */
-    const clearFieldError = (field: keyof T) => {
-        errors[field] = '';
+    const clearFieldError = (field: string) => {
+        (errors as any)[field] = '';
     };
 
     /**
      * Validate a single field
      */
-    const validateField = (field: keyof T): boolean => {
-        const fieldData = { [field]: formData[field] } as Partial<T>;
+    const validateField = (field: string): boolean => {
+        const fieldData = { [field]: (formData as any)[field] } as Partial<T>;
         
         try {
-            const fieldSchema = schema.pick({ [field]: true } as any);
+            const fieldSchema = (schema as any).pick({ [field]: true });
             fieldSchema.parse(fieldData);
             clearFieldError(field);
             return true;
         } catch (err) {
             if (err instanceof z.ZodError && err.issues.length > 0) {
-                errors[field] = err.issues[0]!.message;
+                (errors as any)[field] = err.issues[0]!.message;
             }
             return false;
         }
@@ -52,18 +52,18 @@ export function useForm<T extends Record<string, any>>(
      */
     const validateForm = (): boolean => {
         try {
-            schema.parse(formData);
+            schema.parse(toRaw(formData));
             // Clear all errors on successful validation
             Object.keys(errors).forEach(key => {
-                errors[key as keyof T] = '';
+                (errors as any)[key] = '';
             });
             return true;
         } catch (err) {
             if (err instanceof z.ZodError) {
                 err.issues.forEach((error: z.ZodIssue) => {
-                    const fieldName = error.path[0] as keyof T;
-                    if (fieldName in errors || fieldName in formData) {
-                        errors[fieldName] = error.message;
+                    const fieldName = error.path[0] as string;
+                    if (fieldName) {
+                        (errors as any)[fieldName] = error.message;
                     }
                 });
             }
@@ -86,7 +86,7 @@ export function useForm<T extends Record<string, any>>(
         isSubmitting.value = true;
 
         try {
-            await onSubmit(formData);
+            await onSubmit(toRaw(formData) as T);
             isDirty.value = false;
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -105,7 +105,7 @@ export function useForm<T extends Record<string, any>>(
     const resetForm = () => {
         Object.assign(formData, initialData);
         Object.keys(errors).forEach(key => {
-            errors[key as keyof T] = '';
+            (errors as any)[key] = '';
         });
         isDirty.value = false;
     };

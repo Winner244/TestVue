@@ -164,6 +164,7 @@
     import { z } from 'zod';
     import { useToast } from 'vue-toast-notification';
     import { useForm } from '../../composables/useForm';
+    import { env } from '../../config/env';
 
     // Zod schema for contact form validation
     const contactFormSchema = z.object({
@@ -212,7 +213,7 @@
 
     // Submit handler
     const submitForm = async (data: ContactFormData) => {
-        const response = await fetch('/api/formsubmission', {
+        const response = await fetch(`${env.apiBaseUrl}/formsubmission`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

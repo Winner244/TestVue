@@ -1,5 +1,6 @@
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toast-notification';
+import { env } from '../config/env';
 
 interface Submission {
     id: string;
@@ -9,10 +10,10 @@ interface Submission {
 
 /**
  * Composable for fetching and managing form submissions
- * @param apiEndpoint - API endpoint to fetch submissions from
+ * @param endpoint - API endpoint path (relative to base URL)
  * @returns Submission management utilities
  */
-export function useSubmissions(apiEndpoint: string = '/api/formsubmission') {
+export function useSubmissions(endpoint: string = '/formsubmission') {
     const $toast = useToast();
     const submissions = ref<Submission[]>([]);
     const loading = ref(false);
@@ -26,6 +27,7 @@ export function useSubmissions(apiEndpoint: string = '/api/formsubmission') {
         error.value = null;
 
         try {
+            const apiEndpoint = `${env.apiBaseUrl}${endpoint}`;
             const response = await fetch(apiEndpoint);
             
             if (response.ok) {
