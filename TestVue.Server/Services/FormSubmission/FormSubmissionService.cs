@@ -9,16 +9,21 @@ namespace TestVue.Server.Services.FormSubmission
     public class FormSubmissionService : IFormSubmissionService
     {
         private readonly IFormSubmissionStore _store;
+        private readonly ILogger<FormSubmissionService> _logger;
 
-        public FormSubmissionService(IFormSubmissionStore store)
+        public FormSubmissionService(
+            IFormSubmissionStore store,
+            ILogger<FormSubmissionService> logger)
         {
             _store = store;
+            _logger = logger;
         }
 
         public async Task<Guid> AddAsync(JsonElement formData)
         {
             var data = JsonHelper.ConvertJsonElementToDictionary(formData);
 
+            throw new Exception("Test Error to check ErrorMiddlwear");
             var submission = new FormSubmissionModel
             {
                 Id = Guid.NewGuid(),
@@ -30,17 +35,21 @@ namespace TestVue.Server.Services.FormSubmission
             };
 
             var savedSubmission = await _store.AddAsync(submission);
+            
+            _logger.LogInformation("Form submission saved successfully with ID: {SubmissionId}", savedSubmission.Id);
             return savedSubmission.Id;
         }
 
         public async Task<IEnumerable<FormSubmissionModel>> GetAllAsync()
         {
-            return await _store.GetAllAsync();
+            var submissions = await _store.GetAllAsync();
+            return submissions;
         }
 
         public async Task<FormSubmissionModel?> GetByIdAsync(Guid id)
         {
-            return await _store.GetByIdAsync(id);
+            var submission = await _store.GetByIdAsync(id);
+            return submission;
         }
     }
 }

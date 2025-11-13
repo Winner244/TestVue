@@ -9,14 +9,11 @@ namespace TestVue.Server.Controllers
     public class FormSubmissionController : ControllerBase
     {
         private readonly IFormSubmissionService _formSubmissionService;
-        private readonly ILogger<FormSubmissionController> _logger;
 
         public FormSubmissionController(
-            IFormSubmissionService formSubmissionService,
-            ILogger<FormSubmissionController> logger)
+            IFormSubmissionService formSubmissionService)
         {
             _formSubmissionService = formSubmissionService;
-            _logger = logger;
         }
 
         /// <summary>
@@ -25,84 +22,53 @@ namespace TestVue.Server.Controllers
         /// <param name="formData">Dynamic form data as JSON</param>
         /// <returns>The ID of the created submission</returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SubmitForm([FromBody] JsonElement formData)
         {
-            try
+            // Validate input
+            if (formData.ValueKind == JsonValueKind.Undefined || 
+                formData.ValueKind == JsonValueKind.Null)
             {
-                // Validate input
-                if (formData.ValueKind == JsonValueKind.Undefined || 
-                    formData.ValueKind == JsonValueKind.Null)
-                {
-                    return BadRequest(new { message = "Form data is required" });
-                }
-
-                if (formData.ValueKind != JsonValueKind.Object)
-                {
-                    return BadRequest(new { message = "Form data must be a valid JSON object" });
-                }
-
-                var submissionId = await _formSubmissionService.AddAsync(formData);
-
-                _logger.LogInformation("Form submission created with ID: {SubmissionId}", submissionId);
-
-                return Ok(new { id = submissionId, message = "Form submitted successfully" });
+                return BadRequest(new { message = "Form data is required" });
             }
-            catch (JsonException jsonEx)
+
+            if (formData.ValueKind != JsonValueKind.Object)
             {
-                _logger.LogWarning(jsonEx, "Invalid JSON format in form submission");
-                return BadRequest(new { message = "Invalid JSON format", details = jsonEx.Message });
+                return BadRequest(new { message = "Form data must be a valid JSON object" });
             }
-            catch (ArgumentException argEx)
-            {
-                _logger.LogWarning(argEx, "Invalid argument in form submission");
-                return BadRequest(new { message = argEx.Message });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error submitting form");
-                return StatusCode(500, new { message = "An error occurred while submitting the form" });
-            }
+
+            var submissionId = await _formSubmissionService.AddAsync(formData);
+
+            return Ok(new { id = submissionId, message = "Form submitted successfully" });
         }
 
         /// <summary>
         /// Get all form submissions
         /// </summary>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSubmissions()
         {
-            try
-            {
-                var submissions = await _formSubmissionService.GetAllAsync();
-                return Ok(submissions);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving submissions");
-                return StatusCode(500, new { message = "An error occurred while retrieving submissions" });
-            }
+            var submissions = await _formSubmissionService.GetAllAsync();
+            return Ok(submissions);
         }
 
         /// <summary>
         /// Get a specific submission by ID
         /// </summary>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSubmissionById(Guid id)
         {
-            try
+            var submission = await _formSubmissionService.GetByIdAsync(id);
+            if (submission == null)
             {
-                var submission = await _formSubmissionService.GetByIdAsync(id);
-                if (submission == null)
-                {
-                    return NotFound(new { message = "Submission not found" });
-                }
+                return NotFound(new { message = "Submission not found" });
+            }
 
-                return Ok(submission);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving submission {SubmissionId}", id);
-                return StatusCode(500, new { message = "An error occurred while retrieving the submission" });
-            }
+            return Ok(submission);
         }
     }
 }
