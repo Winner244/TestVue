@@ -1,17 +1,15 @@
 <script setup lang="ts">
-    import '../assets/styles/header.less'
+defineProps<{
+  activeTab: 'contact' | 'order' | 'submissions';
+}>();
 
-    defineProps<{
-        activeTab: 'contact' | 'order' | 'submissions';
-    }>();
+const emit = defineEmits<{
+  (e: 'update:activeTab', value: 'contact' | 'order' | 'submissions'): void;
+}>();
 
-    const emit = defineEmits<{
-        (e: 'update:activeTab', value: 'contact' | 'order' | 'submissions'): void;
-    }>();
-
-    const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
-        emit('update:activeTab', tab);
-    };
+const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
+  emit('update:activeTab', tab);
+};
 </script>
 
 <template>
@@ -39,3 +37,5 @@
     </nav>
   </header>
 </template>
+
+<style scoped lang="less" src="./header.less"></style>

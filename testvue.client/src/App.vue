@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    import Header from './components/Header.vue';
-    import ContactForm from './components/ContactForm.vue';
-    import OrderForm from './components/OrderForm.vue';
-    import SubmissionsList from './components/SubmissionsList.vue';
+    import Header from './components/Header/Header.vue';
+    import ContactForm from './components/ContactForm/ContactForm.vue';
+    import OrderForm from './components/OrderForm/OrderForm.vue';
+    import SubmissionsList from './components/SubmissionsList/SubmissionsList.vue';
     import './assets/styles/app.less'
 
     const activeTab = ref<'contact' | 'order' | 'submissions'>('contact');

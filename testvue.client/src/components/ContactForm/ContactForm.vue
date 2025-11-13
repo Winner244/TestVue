@@ -115,7 +115,6 @@
 
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
-    import '../assets/styles/contact-form.less'
 
     const formData = reactive({
         fullName: '',
@@ -260,3 +259,5 @@
         }
     };
 </script>
+
+<style scoped lang="less" src="./contact-form.less"></style>

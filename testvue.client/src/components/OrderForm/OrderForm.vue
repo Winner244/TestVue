@@ -171,7 +171,6 @@
 
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
-    import '../assets/styles/order-form.less'
 
     const formData = reactive({
     productName: '',
@@ -307,3 +306,5 @@
     }
     };
 </script>
+
+<style scoped lang="less" src="./order-form.less"></style>

@@ -49,7 +49,6 @@
 
 <script setup lang="ts">
     import { ref, computed, onMounted } from 'vue';
-    import '../assets/styles/submissions-list.less'
 
     interface Submission {
     id: string;
@@ -133,3 +132,5 @@
     loadSubmissions();
     });
 </script>
+
+<style scoped lang="less" src="./submissions-list.less"></style>
