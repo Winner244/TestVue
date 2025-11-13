@@ -12,7 +12,7 @@ const activeTab = ref<'contact' | 'submissions'>('contact');
     <div class="app-container">
         <Header :activeTab="activeTab" @update:activeTab="activeTab = $event" />
 
-        <main>
+        <main role="main" aria-label="Main content">
             <ContactForm v-if="activeTab === 'contact'" />
             <SubmissionsList v-else />
         </main>

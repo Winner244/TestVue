@@ -3,33 +3,45 @@
         <h2 class="submissions__heading">Form Submissions</h2>
 
         <!-- Search Bar -->
-        <div class="submissions__search">
-            <input type="text" v-model="searchQuery" placeholder="Search submissions..." class="submissions__input" />
-            <button @click="loadSubmissions" class="submissions__button">Refresh</button>
+        <div class="submissions__search" role="search" aria-label="Search submissions">
+            <label for="search-input" class="sr-only">Search submissions</label>
+            <input 
+                type="search" 
+                id="search-input"
+                v-model="searchQuery" 
+                placeholder="Search submissions..." 
+                class="submissions__input"
+                aria-label="Search through form submissions" />
+            <button 
+                @click="loadSubmissions" 
+                class="submissions__button"
+                aria-label="Refresh submissions list">
+                Refresh
+            </button>
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="submissions__status">Loading submissions...</div>
+        <div v-if="loading" class="submissions__status" role="status" aria-live="polite" aria-busy="true">Loading submissions...</div>
 
         <!-- No Results -->
-        <div v-else-if="filteredSubmissions.length === 0" class="submissions__status">
+        <div v-else-if="filteredSubmissions.length === 0" class="submissions__status" role="status" aria-live="polite">
             No submissions found.
         </div>
 
         <!-- Submissions List -->
-        <div v-else class="submissions__list">
-            <div v-for="submission in filteredSubmissions" :key="submission.id" class="submissions__card">
+        <div v-else class="submissions__list" role="region" aria-label="List of form submissions">
+            <article v-for="submission in filteredSubmissions" :key="submission.id" class="submissions__card">
                 <div class="submissions__card-header">
                     <span class="submissions__card-id">ID: {{ submission.id }}</span>
-                    <span class="submissions__card-date">{{ formatDate(submission.submittedAt) }}</span>
+                    <time class="submissions__card-date" :datetime="submission.submittedAt">{{ formatDate(submission.submittedAt) }}</time>
                 </div>
-                <div class="submissions__card-body">
+                <dl class="submissions__card-body">
                     <div v-for="(value, key) in submission.formData" :key="key" class="submissions__field">
-                        <span class="submissions__field-label">{{ formatFieldName(key) }}:</span>
-                        <span class="submissions__field-value">{{ formatFieldValue(value) }}</span>
+                        <dt class="submissions__field-label">{{ formatFieldName(key) }}:</dt>
+                        <dd class="submissions__field-value">{{ formatFieldValue(value) }}</dd>
                     </div>
-                </div>
-            </div>
+                </dl>
+            </article>
         </div>
     </div>
 </template>
@@ -37,10 +49,10 @@
 <style scoped lang="less" src="./submissions-list.less"></style>
 
 <script setup lang="ts">
-    import { ref, computed, onMounted } from 'vue';
-    import { useToast } from 'vue-toast-notification';
+    import { ref, computed } from 'vue';
     import { formatDate, formatFieldName, formatFieldValue } from '../../utils/formatters';
     import { formatBooleanValue } from '../../constants/booleanDisplay';
+    import { useSubmissions } from '../../composables/useSubmissions';
 
     interface Submission {
         id: string;
@@ -48,34 +60,10 @@
         submittedAt: string;
     }
 
-    const submissions = ref<Submission[]>([]);
     const searchQuery = ref('');
-    const loading = ref(false);
-    const $toast = useToast();
 
-    const loadSubmissions = async () => {
-        loading.value = true;
-        try {
-            const response = await fetch('/api/formsubmission');
-            if (response.ok) {
-                submissions.value = await response.json();
-            } else {
-                console.error('Error to load submissions:', response);
-                $toast.error('Failed to load submissions. Please try again.', {
-                    position: 'top',
-                    duration: 5000
-                });
-            }
-        } catch (error) {
-            console.error('Error loading submissions:', error);
-            $toast.error('An error occurred while loading submissions. Please try again.', {
-                position: 'top',
-                duration: 5000
-            });
-        } finally {
-            loading.value = false;
-        }
-    };
+    // Use the submissions composable
+    const { submissions, loading, loadSubmissions } = useSubmissions();
 
     const filteredSubmissions = computed(() => {
         if (!searchQuery.value.trim()) {
@@ -107,9 +95,5 @@
                 return false;
             });
         });
-    });
-
-    onMounted(() => {
-        loadSubmissions();
     });
 </script>

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TestVue.Server.Services;
 using System.Text.Json;
+using TestVue.Server.Helper;
 
 namespace TestVue.Server.Controllers
 {
@@ -34,7 +35,7 @@ namespace TestVue.Server.Controllers
 
                 foreach (var property in formData.EnumerateObject())
                 {
-                    dataDictionary[property.Name] = ConvertJsonElement(property.Value);
+                    dataDictionary[property.Name] = JsonHelper.ConvertJsonElement(property.Value);
                 }
 
                 var submissionId = await _formSubmissionService.SaveSubmissionAsync(dataDictionary);
@@ -90,21 +91,6 @@ namespace TestVue.Server.Controllers
                 _logger.LogError(ex, "Error retrieving submission {SubmissionId}", id);
                 return StatusCode(500, new { message = "An error occurred while retrieving the submission" });
             }
-        }
-
-        private object ConvertJsonElement(JsonElement element)
-        {
-            return element.ValueKind switch
-            {
-                JsonValueKind.String => element.GetString() ?? "",
-                JsonValueKind.Number => element.TryGetInt32(out var intValue) ? intValue : element.GetDouble(),
-                JsonValueKind.True => true,
-                JsonValueKind.False => false,
-                JsonValueKind.Array => element.EnumerateArray().Select(ConvertJsonElement).ToList(),
-                JsonValueKind.Object => element.EnumerateObject()
-                    .ToDictionary(p => p.Name, p => ConvertJsonElement(p.Value)),
-                _ => element.GetRawText()
-            };
         }
     }
 }

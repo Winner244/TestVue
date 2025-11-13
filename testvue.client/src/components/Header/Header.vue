@@ -1,14 +1,16 @@
 <template>
     <header class="header">
         <h1 class="header__title">Test ASP.NET + Vue</h1>
-        <nav class="header__nav">
+        <nav class="header__nav" aria-label="Main navigation">
             <button @click="handleTabClick('contact')"
-                :class="['header__tab', { 'header__tab--active': activeTab === 'contact' }]">
+                :class="['header__tab', { 'header__tab--active': activeTab === 'contact' }]"
+                :aria-current="activeTab === 'contact' ? 'page' : undefined">
                 Contact Form
             </button>
 
             <button @click="handleTabClick('submissions')"
-                :class="['header__tab', { 'header__tab--active': activeTab === 'submissions' }]">
+                :class="['header__tab', { 'header__tab--active': activeTab === 'submissions' }]"
+                :aria-current="activeTab === 'submissions' ? 'page' : undefined">
                 View Result
             </button>
         </nav>
