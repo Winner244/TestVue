@@ -1,129 +1,164 @@
-/* Styles for SubmissionsList moved into component folder */
-.submissions-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+@import '../../assets/styles/main.less';
+
+// Variables
+@submissions-accent-color: #42b983;
+@submissions-accent-hover: #359268;
+@submissions-text-primary: #2c3e50;
+@submissions-border-color: #e0e0e0;
+@submissions-bg-light: #f8f9fa;
+@submissions-text-secondary: #ffffff;
+@submissions-text-field: #555;
+@submissions-border-radius: 4px;
+
+// Block: submissions
+.submissions {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    // Element: submissions__heading
+    &__heading {
+        color: @text-header;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    // Element: submissions__search (search bar container)
+    &__search {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        align-items: center;
+    }
+
+    // Element: submissions__input (search input field)
+    &__input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 2px solid @submissions-border-color;
+        border-radius: @submissions-border-radius;
+        font-size: 1rem;
+
+        // State: submissions__input:focus
+        &:focus {
+            outline: none;
+            border-color: @submissions-accent-color;
+        }
+    }
+
+    // Element: submissions__button (refresh button)
+    &__button {
+        padding: 0.75rem 1.5rem;
+        background-color: @submissions-accent-color;
+        color: white;
+        border: none;
+        border-radius: @submissions-border-radius;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        // State: submissions__button:hover
+        &:hover {
+            background-color: @submissions-accent-hover;
+        }
+    }
+
+    // Element: submissions__status (loading and no-results messages)
+    &__status {
+        text-align: center;
+        padding: 2rem;
+        color: @submissions-text-secondary;
+        font-size: 1.1rem;
+    }
+
+    // Element: submissions__list (container for all submission cards)
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    // Element: submissions__card (individual submission card)
+    &__card {
+        background: white;
+        border-radius: @submissions-border-radius;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: box-shadow 0.3s;
+
+        // State: submissions__card:hover
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    // Element: submissions__card-header (top section with ID and date)
+    &__card-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        background-color: @submissions-bg-light;
+        border-bottom: 1px solid @submissions-border-color;
+    }
+
+    // Element: submissions__card-id (submission ID in header)
+    &__card-id {
+        font-weight: 600;
+        color: @submissions-text-primary;
+    }
+
+    // Element: submissions__card-date (submission date in header)
+    &__card-date {
+        color: @submissions-text-secondary;
+        font-size: 0.9rem;
+    }
+
+    // Element: submissions__card-body (content section with form fields)
+    &__card-body {
+        padding: 1.5rem;
+    }
+
+    // Element: submissions__field (individual form field row)
+    &__field {
+        display: flex;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+
+        // Modifier: submissions__field--last (remove border from last field)
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    // Element: submissions__field-label (field name/label)
+    &__field-label {
+        flex: 0 0 200px;
+        font-weight: 600;
+        color: @submissions-text-primary;
+    }
+
+    // Element: submissions__field-value (field value/content)
+    &__field-value {
+        flex: 1;
+        color: @submissions-text-field;
+        word-break: break-word;
+    }
 }
 
-h2 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.search-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  align-items: center;
-}
-
-.search-input {
-  flex: 1;
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #42b983;
-}
-
-.btn-refresh {
-  padding: 0.75rem 1.5rem;
-  background-color: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-refresh:hover {
-  background-color: #359268;
-}
-
-.loading,
-.no-results {
-  text-align: center;
-  padding: 2rem;
-  color: #666;
-  font-size: 1.1rem;
-}
-
-.submissions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.submission-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: box-shadow 0.3s;
-}
-
-.submission-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.submission-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.submission-id {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.submission-date {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.submission-body {
-  padding: 1.5rem;
-}
-
-.field-row {
-  display: flex;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.field-row:last-child {
-  border-bottom: none;
-}
-
-.field-label {
-  flex: 0 0 200px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.field-value {
-  flex: 1;
-  color: #555;
-  word-break: break-word;
-}
-
+// Responsive: adjust layout for smaller screens
 @media (max-width: 768px) {
-  .field-row {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
+    .submissions {
 
-  .field-label {
-    flex: none;
-  }
+        // Modifier: submissions__field stacks vertically on mobile
+        &__field {
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        // Modifier: submissions__field-label takes full width on mobile
+        &__field-label {
+            flex: none;
+        }
+    }
 }

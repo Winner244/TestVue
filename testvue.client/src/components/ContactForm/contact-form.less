@@ -1,125 +1,145 @@
-/* Styles for ContactForm moved into component folder */
-.form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2rem;
-}
+@import '../../assets/styles/main.less';
 
-h2 {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
+// Variables
+@form-primary-color: #42b983;
+@form-primary-hover: #359268;
+@form-error-color: #e74c3c;
+@form-success-bg: #d4edda;
+@form-success-text: #155724;
+@form-success-border: #c3e6cb;
+@form-text-primary: #2c3e50;
+@form-border-color: #e0e0e0;
+@form-border-radius: 4px;
+@form-transition: border-color 0.3s;
 
+// Block: contact-form
 .contact-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+    margin: 0 auto;
+    padding: 0 2rem;
 
-.form-group {
-    margin-bottom: 1.5rem;
-}
+    // Element: contact-form__heading
+    &__heading {
+        color: @text-header;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
 
-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #2c3e50;
-    font-weight: 500;
-}
+    // Element: contact-form__card
+    &__card {
+        background: white;
+        padding: 2rem;
+        border-radius: @form-border-radius;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-input[type="text"],
-input[type="email"],
-input[type="date"],
-select,
-textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-    box-sizing: border-box;
-}
+    // Element: contact-form__group
+    &__group {
+        margin-bottom: 1.5rem;
+    }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="date"]:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #42b983;
-}
+    // Element: contact-form__label
+    &__label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: @form-text-primary;
+        font-weight: 500;
+    }
 
-input.error,
-select.error,
-textarea.error {
-    border-color: #e74c3c;
-}
+    // Element: contact-form__input - text, email, date
+    &__input,
+    &__select,
+    &__textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid @form-border-color;
+        border-radius: @form-border-radius;
+        font-size: 1rem;
+        transition: @form-transition;
+        box-sizing: border-box;
 
-.error-message {
-    display: block;
-    color: #e74c3c;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
+        // Modifier: contact-form__input--error
+        &--error {
+            border-color: @form-error-color;
+        }
 
-.radio-group,
-.checkbox-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
+        // State: contact-form__input:focus
+        &:focus {
+            outline: none;
+            border-color: @form-primary-color;
+        }
+    }
 
-.radio-label,
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    font-weight: normal;
-    cursor: pointer;
-}
+    // Element: contact-form__error-message
+    &__error-message {
+        display: block;
+        color: @form-error-color;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
 
-.radio-label input,
-.checkbox-label input {
-    margin-right: 0.5rem;
-    width: auto;
-    cursor: pointer;
-}
+    // Element: contact-form__radio-group, contact-form__checkbox-group
+    &__radio-group,
+    &__checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
 
-.form-actions {
-    margin-top: 2rem;
-}
+    // Element: contact-form__radio-label, contact-form__checkbox-label
+    &__radio-label,
+    &__checkbox-label {
+        display: flex;
+        align-items: center;
+        font-weight: normal;
+        cursor: pointer;
 
-.btn-submit {
-    width: 100%;
-    padding: 1rem;
-    background-color: #42b983;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        // Child input element
+        input {
+            margin-right: 0.5rem;
+            width: auto;
+            cursor: pointer;
+        }
+    }
 
-.btn-submit:hover:not(:disabled) {
-    background-color: #359268;
-}
+    // Element: contact-form__actions
+    &__actions {
+        margin-top: 2rem;
+    }
 
-.btn-submit:disabled {
-    background-color: #a0a0a0;
-    cursor: not-allowed;
-}
+    // Element: contact-form__button
+    &__button {
+        width: 100%;
+        padding: 1rem;
+        background-color: @form-primary-color;
+        color: white;
+        border: none;
+        border-radius: @form-border-radius;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s;
 
-.success-message {
-    margin-top: 1rem;
-    padding: 1rem;
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    border-radius: 4px;
-    text-align: center;
+        // State: contact-form__button:hover (not disabled)
+        &:hover:not(:disabled) {
+            background-color: @form-primary-hover;
+        }
+
+        // Modifier: contact-form__button--disabled
+        &:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+    }
+
+    // Element: contact-form__success-message
+    &__success-message {
+        margin-top: 1rem;
+        padding: 1rem;
+        background-color: @form-success-bg;
+        color: @form-success-text;
+        border: 1px solid @form-success-border;
+        border-radius: @form-border-radius;
+        text-align: center;
+    }
 }

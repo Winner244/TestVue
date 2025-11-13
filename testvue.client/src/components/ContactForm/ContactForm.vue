@@ -1,81 +1,81 @@
 <template>
-    <div class="form-container">
-        <h2>Contact Form</h2>
-        <form @submit.prevent="handleSubmit" class="contact-form">
+    <div class="contact-form">
+        <h2 class="contact-form__heading">Contact Form</h2>
+        <form @submit.prevent="handleSubmit" class="contact-form__card">
             <!-- Text Field: Full Name -->
-            <div class="form-group">
-                <label for="fullName">Full Name *</label>
+            <div class="contact-form__group">
+                <label for="fullName" class="contact-form__label">Full Name *</label>
                 <input type="text" id="fullName" v-model="formData.fullName" @blur="validateField('fullName')"
-                    :class="{ 'error': errors.fullName }" />
-                <span v-if="errors.fullName" class="error-message">{{ errors.fullName }}</span>
+                    class="contact-form__input" :class="{ 'contact-form__input--error': errors.fullName }" />
+                <span v-if="errors.fullName" class="contact-form__error-message">{{ errors.fullName }}</span>
             </div>
 
             <!-- Email Field -->
-            <div class="form-group">
-                <label for="email">Email Address *</label>
+            <div class="contact-form__group">
+                <label for="email" class="contact-form__label">Email Address *</label>
                 <input type="email" id="email" v-model="formData.email" @blur="validateField('email')"
-                    :class="{ 'error': errors.email }" />
-                <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
+                    class="contact-form__input" :class="{ 'contact-form__input--error': errors.email }" />
+                <span v-if="errors.email" class="contact-form__error-message">{{ errors.email }}</span>
             </div>
 
             <!-- Dropdown: Subject -->
-            <div class="form-group">
-                <label for="subject">Subject *</label>
+            <div class="contact-form__group">
+                <label for="subject" class="contact-form__label">Subject *</label>
                 <select id="subject" v-model="formData.subject" @change="validateField('subject')"
-                    :class="{ 'error': errors.subject }">
+                    class="contact-form__select" :class="{ 'contact-form__select--error': errors.subject }">
                     <option value="">Select a subject</option>
                     <option value="general">General Inquiry</option>
                     <option value="support">Technical Support</option>
                     <option value="sales">Sales</option>
                     <option value="feedback">Feedback</option>
                 </select>
-                <span v-if="errors.subject" class="error-message">{{ errors.subject }}</span>
+                <span v-if="errors.subject" class="contact-form__error-message">{{ errors.subject }}</span>
             </div>
 
             <!-- Date Field: Preferred Contact Date -->
-            <div class="form-group">
-                <label for="contactDate">Preferred Contact Date *</label>
+            <div class="contact-form__group">
+                <label for="contactDate" class="contact-form__label">Preferred Contact Date *</label>
                 <input type="date" id="contactDate" v-model="formData.contactDate" @blur="validateField('contactDate')"
-                    :class="{ 'error': errors.contactDate }" />
-                <span v-if="errors.contactDate" class="error-message">{{ errors.contactDate }}</span>
+                    class="contact-form__input" :class="{ 'contact-form__input--error': errors.contactDate }" />
+                <span v-if="errors.contactDate" class="contact-form__error-message">{{ errors.contactDate }}</span>
             </div>
 
             <!-- Radio Buttons: Contact Method -->
-            <div class="form-group">
-                <label>Preferred Contact Method *</label>
-                <div class="radio-group">
-                    <label class="radio-label">
+            <div class="contact-form__group">
+                <label class="contact-form__label">Preferred Contact Method *</label>
+                <div class="contact-form__radio-group">
+                    <label class="contact-form__radio-label">
                         <input type="radio" name="contactMethod" value="email" v-model="formData.contactMethod"
                             @change="validateField('contactMethod')" />
                         Email
                     </label>
-                    <label class="radio-label">
+                    <label class="contact-form__radio-label">
                         <input type="radio" name="contactMethod" value="phone" v-model="formData.contactMethod"
                             @change="validateField('contactMethod')" />
                         Phone
                     </label>
-                    <label class="radio-label">
+                    <label class="contact-form__radio-label">
                         <input type="radio" name="contactMethod" value="sms" v-model="formData.contactMethod"
                             @change="validateField('contactMethod')" />
                         SMS
                     </label>
                 </div>
-                <span v-if="errors.contactMethod" class="error-message">{{ errors.contactMethod }}</span>
+                <span v-if="errors.contactMethod" class="contact-form__error-message">{{ errors.contactMethod }}</span>
             </div>
 
             <!-- Checkboxes: Interests -->
-            <div class="form-group">
-                <label>Areas of Interest</label>
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
+            <div class="contact-form__group">
+                <label class="contact-form__label">Areas of Interest</label>
+                <div class="contact-form__checkbox-group">
+                    <label class="contact-form__checkbox-label">
                         <input type="checkbox" value="products" v-model="formData.interests" />
                         Products
                     </label>
-                    <label class="checkbox-label">
+                    <label class="contact-form__checkbox-label">
                         <input type="checkbox" value="services" v-model="formData.interests" />
                         Services
                     </label>
-                    <label class="checkbox-label">
+                    <label class="contact-form__checkbox-label">
                         <input type="checkbox" value="partnership" v-model="formData.interests" />
                         Partnership
                     </label>
@@ -83,30 +83,31 @@
             </div>
 
             <!-- Text Area: Message -->
-            <div class="form-group">
-                <label for="message">Message *</label>
+            <div class="contact-form__group">
+                <label for="message" class="contact-form__label">Message *</label>
                 <textarea id="message" v-model="formData.message" rows="5" @blur="validateField('message')"
-                    :class="{ 'error': errors.message }"></textarea>
-                <span v-if="errors.message" class="error-message">{{ errors.message }}</span>
+                    class="contact-form__textarea"
+                    :class="{ 'contact-form__textarea--error': errors.message }"></textarea>
+                <span v-if="errors.message" class="contact-form__error-message">{{ errors.message }}</span>
             </div>
 
             <!-- Checkbox: Newsletter -->
-            <div class="form-group">
-                <label class="checkbox-label">
+            <div class="contact-form__group">
+                <label class="contact-form__checkbox-label">
                     <input type="checkbox" v-model="formData.newsletter" />
                     Subscribe to newsletter
                 </label>
             </div>
 
             <!-- Submit Button -->
-            <div class="form-actions">
-                <button type="submit" class="btn-submit" :disabled="isSubmitting">
+            <div class="contact-form__actions">
+                <button type="submit" class="contact-form__button" :disabled="isSubmitting">
                     {{ isSubmitting ? 'Submitting...' : 'Submit' }}
                 </button>
             </div>
 
             <!-- Success Message -->
-            <div v-if="successMessage" class="success-message">
+            <div v-if="successMessage" class="contact-form__success-message">
                 {{ successMessage }}
             </div>
         </form>
