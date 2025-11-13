@@ -14,14 +14,13 @@ const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
 
 <template>
   <header class="header">
-    <h1 class="header__title">Form Submission System</h1>
-    <p class="header__subtitle">Demonstrating dynamic form handling with Vue.js & ASP.NET Core</p>
+    <h1 class="header__title">Test ASP.NET + Vue</h1>
     <nav class="header__nav">
       <button
         @click="handleTabClick('contact')"
         :class="['header__tab', { 'header__tab--active': activeTab === 'contact' }]"
       >
-        Contact Form
+        Contat Form
       </button>
       <button
         @click="handleTabClick('order')"
@@ -33,7 +32,7 @@ const handleTabClick = (tab: 'contact' | 'order' | 'submissions') => {
         @click="handleTabClick('submissions')"
         :class="['header__tab', { 'header__tab--active': activeTab === 'submissions' }]"
       >
-        View Submissions
+        View Result
       </button>
     </nav>
   </header>

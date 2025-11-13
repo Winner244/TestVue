@@ -2,40 +2,6 @@
 
 // Variables
 @max-width: 1280px;
-@padding: 2rem;
+@padding: 2rem 1rem;
 @link-color: hsla(160, 100%, 37%, 1);
 @link-hover-bg: hsla(160, 100%, 37%, 0.2);
-
-#app {
-  max-width: @max-width;
-  margin: 0 auto;
-  padding: @padding;
-  font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: @link-color;
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: @link-hover-bg;
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 @padding;
-  }
-}
