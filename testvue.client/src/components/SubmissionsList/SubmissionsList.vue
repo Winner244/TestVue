@@ -39,6 +39,7 @@
 <script setup lang="ts">
     import { ref, computed, onMounted } from 'vue';
     import { useToast } from 'vue-toast-notification';
+    import { BOOLEAN_DISPLAY, formatBooleanValue } from '../../constants/booleanDisplay';
 
     interface Submission {
         id: string;
@@ -57,7 +58,7 @@
             return submissions.value;
         }
 
-        const query = searchQuery.value.toLowerCase();
+        const query = searchQuery.value.trim().toLowerCase();
         return submissions.value.filter(submission => {
             // Search in ID
             if (submission.id.toLowerCase().includes(query)) {
@@ -69,6 +70,11 @@
                 if (typeof value === 'string') {
                     return value.toLowerCase().includes(query);
                 }
+                
+                if (typeof value === 'boolean') {
+                    return formatBooleanValue(value).toLowerCase().includes(query);
+                }
+                
                 if (Array.isArray(value)) {
                     return value.some(item =>
                         typeof item === 'string' && item.toLowerCase().includes(query)
@@ -119,7 +125,7 @@
             return 'N/A';
         }
         if (typeof value === 'boolean') {
-            return value ? 'Yes' : 'No';
+            return formatBooleanValue(value);
         }
         if (Array.isArray(value)) {
             return value.length > 0 ? value.join(', ') : 'None';
