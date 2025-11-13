@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import Header from './components/Header/Header.vue';
-import ContactForm from './components/ContactForm/ContactForm.vue';
-import SubmissionsList from './components/SubmissionsList/SubmissionsList.vue';
 import './assets/styles/app.less'
 
-const activeTab = ref<'contact' | 'submissions'>('contact');
+const route = useRoute();
+const activeTab = computed(() => route.name === 'submissions' ? 'submissions' : 'contact');
 </script>
 
 <template>
     <div class="app-container">
-        <Header :activeTab="activeTab" @update:activeTab="activeTab = $event" />
+        <Header :activeTab="activeTab" />
 
         <main role="main" aria-label="Main content">
-            <ContactForm v-if="activeTab === 'contact'" />
-            <SubmissionsList v-else />
+            <router-view />
         </main>
     </div>
 </template>

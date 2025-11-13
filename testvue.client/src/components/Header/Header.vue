@@ -2,17 +2,17 @@
     <header class="header">
         <h1 class="header__title">Test ASP.NET + Vue</h1>
         <nav class="header__nav" aria-label="Main navigation">
-            <button @click="handleTabClick('contact')"
+            <router-link to="/"
                 :class="['header__tab', { 'header__tab--active': activeTab === 'contact' }]"
                 :aria-current="activeTab === 'contact' ? 'page' : undefined">
                 Contact Form
-            </button>
+            </router-link>
 
-            <button @click="handleTabClick('submissions')"
+            <router-link to="/submissions"
                 :class="['header__tab', { 'header__tab--active': activeTab === 'submissions' }]"
                 :aria-current="activeTab === 'submissions' ? 'page' : undefined">
                 View Result
-            </button>
+            </router-link>
         </nav>
     </header>
 </template>
@@ -23,12 +23,4 @@
     defineProps<{
         activeTab: 'contact' | 'submissions';
     }>();
-
-    const emit = defineEmits<{
-        (e: 'update:activeTab', value: 'contact' | 'submissions'): void;
-    }>();
-
-    const handleTabClick = (tab: 'contact' | 'submissions') => {
-        emit('update:activeTab', tab);
-    };
 </script>

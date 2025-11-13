@@ -23,7 +23,6 @@ namespace TestVue.Server.Services.FormSubmission
         {
             var data = JsonHelper.ConvertJsonElementToDictionary(formData);
 
-            throw new Exception("Test Error to check ErrorMiddlwear");
             var submission = new FormSubmissionModel
             {
                 Id = Guid.NewGuid(),
