@@ -88,6 +88,10 @@
                 if (typeof value === 'string') {
                     return value.toLowerCase().includes(query);
                 }
+
+                if (typeof value === 'number') {
+                    return value.toString().includes(query);
+                }
                 
                 if (typeof value === 'boolean') {
                     return formatBooleanValue(value).toLowerCase().includes(query);
@@ -98,6 +102,7 @@
                         typeof item === 'string' && item.toLowerCase().includes(query)
                     );
                 }
+                
                 return false;
             });
         });

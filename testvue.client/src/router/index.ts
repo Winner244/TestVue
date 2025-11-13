@@ -29,19 +29,11 @@ const router = createRouter({
     ]
 })
 
-// Global navigation guard to handle server routes
+
+// Update page title on route change
 router.beforeEach((to, _from, next) => {
-    // Check if the route should be handled by the server
-    if (to.path.startsWith('/api/') || 
-        to.path.startsWith('/health') || 
-        to.path.startsWith('/swagger')) {
-        // Force full page navigation to server
-        window.location.href = to.fullPath
-        return // Don't call next() - we're leaving the app
-    }
-    
-    document.title = (to.meta.title as string) || 'TestVue App'
-    next()
+  document.title = (to.meta.title as string) || 'TestVue App'
+  next()
 })
 
 export default router
