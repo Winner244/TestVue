@@ -7,11 +7,12 @@ namespace TestVue.Server.Configuration
     {
         public static JsonSerializerOptions DefaultOptions { get; } = new JsonSerializerOptions
         {
+            // Preserve original (declared) property casing
             PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNamingPolicy = null,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+            Converters = { new JsonStringEnumConverter() }
         };
     }
 }

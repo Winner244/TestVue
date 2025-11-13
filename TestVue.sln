@@ -7,6 +7,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "TestVue.Client", "testvue.c
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVue.Server", "TestVue.Server\TestVue.Server.csproj", "{6D6DD2C6-FFF3-49DF-8542-1528AE37CD76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVue.Server.Tests", "TestVue.Server.Tests\TestVue.Server.Tests.csproj", "{A1F6B8D0-6B6A-4F2E-9C3D-4A5C9B8E12F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{6D6DD2C6-FFF3-49DF-8542-1528AE37CD76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D6DD2C6-FFF3-49DF-8542-1528AE37CD76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D6DD2C6-FFF3-49DF-8542-1528AE37CD76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1F6B8D0-6B6A-4F2E-9C3D-4A5C9B8E12F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F6B8D0-6B6A-4F2E-9C3D-4A5C9B8E12F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F6B8D0-6B6A-4F2E-9C3D-4A5C9B8E12F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F6B8D0-6B6A-4F2E-9C3D-4A5C9B8E12F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
