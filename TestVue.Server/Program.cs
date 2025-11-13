@@ -95,17 +95,11 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
-// Enable CORS (before authentication/authorization)
-app.UseCors("AllowVueApp");
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-// Map API endpoints first (before static files)
+// Map API endpoints FIRST (before routing middleware)
 app.MapHealthChecks("/health");
 app.MapControllers();
 
-// Configure Swagger (available in all environments for API testing)
+// Configure Swagger (before static files)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -117,15 +111,20 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseRouting();
+
+// Enable CORS (before authentication/authorization)
+app.UseCors("AllowVueApp");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Static files and SPA fallback last
 app.UseDefaultFiles();
 app.MapStaticAssets();
 
-// Fallback to index.html only for non-API routes
-app.MapFallbackToFile("/index.html").Add(endpointBuilder =>
-{
-    ((Microsoft.AspNetCore.Routing.RouteEndpointBuilder)endpointBuilder).Order = int.MaxValue;
-});
+// Fallback to index.html - this will only match if no other endpoint matched
+app.MapFallbackToFile("/index.html");
 
 app.Run();
 }
