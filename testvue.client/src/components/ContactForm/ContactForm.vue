@@ -2,6 +2,11 @@
     <div class="contact-form">
         <h2 class="contact-form__heading">Contact Form</h2>
         <form @submit.prevent="handleSubmit" class="contact-form__card">
+            <!-- Success Message -->
+            <div v-if="successMessage" class="contact-form__success-message">
+                {{ successMessage }}
+            </div>
+
             <!-- Text Field: Full Name -->
             <div class="contact-form__group">
                 <label for="fullName" class="contact-form__label">Full Name *</label>
@@ -105,17 +110,45 @@
                     {{ isSubmitting ? 'Submitting...' : 'Submit' }}
                 </button>
             </div>
-
-            <!-- Success Message -->
-            <div v-if="successMessage" class="contact-form__success-message">
-                {{ successMessage }}
-            </div>
         </form>
     </div>
 </template>
 
+<style scoped lang="less" src="./contact-form.less"></style>
+
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
+    import { z } from 'zod';
+
+    // Zod schema for contact form validation
+    const contactFormSchema = z.object({
+        fullName: z.string()
+            .min(2, 'Full name must be at least 2 characters')
+            .min(1, 'Full name is required'),
+        email: z.string()
+            .min(1, 'Email is required')
+            .email('Please enter a valid email address'),
+        subject: z.string()
+            .min(1, 'Please select a subject'),
+        contactDate: z.string()
+            .min(1, 'Please select a date')
+            .refine((date) => {
+                const selectedDate = new Date(date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return selectedDate >= today;
+            }, 'Date cannot be in the past'),
+        contactMethod: z.string()
+            .min(1, 'Please select a contact method'),
+        interests: z.array(z.string()).optional(),
+        message: z.string()
+            .min(1, 'Message is required')
+            .min(10, 'Message must be at least 10 characters'),
+        newsletter: z.boolean().optional(),
+        formType: z.string().optional()
+    });
+
+    type ContactFormData = z.infer<typeof contactFormSchema>;
 
     const formData = reactive({
         fullName: '',
@@ -126,7 +159,7 @@
         interests: [] as string[],
         message: '',
         newsletter: false,
-        formType: 'contact' // To identify this form type in backend
+        formType: 'contact'
     });
 
     const errors = reactive({
@@ -141,81 +174,45 @@
     const isSubmitting = ref(false);
     const successMessage = ref('');
 
+    const clearFieldError = (field: keyof typeof errors) => {
+        errors[field] = '';
+    };
+
     const validateField = (field: string) => {
-        switch (field) {
-            case 'fullName':
-                if (!formData.fullName.trim()) {
-                    errors.fullName = 'Full name is required';
-                } else if (formData.fullName.trim().length < 2) {
-                    errors.fullName = 'Full name must be at least 2 characters';
-                } else {
-                    errors.fullName = '';
-                }
-                break;
-
-            case 'email':
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!formData.email.trim()) {
-                    errors.email = 'Email is required';
-                } else if (!emailRegex.test(formData.email)) {
-                    errors.email = 'Please enter a valid email address';
-                } else {
-                    errors.email = '';
-                }
-                break;
-
-            case 'subject':
-                if (!formData.subject) {
-                    errors.subject = 'Please select a subject';
-                } else {
-                    errors.subject = '';
-                }
-                break;
-
-            case 'contactDate':
-                if (!formData.contactDate) {
-                    errors.contactDate = 'Please select a date';
-                } else {
-                    const selectedDate = new Date(formData.contactDate);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    if (selectedDate < today) {
-                        errors.contactDate = 'Date cannot be in the past';
-                    } else {
-                        errors.contactDate = '';
-                    }
-                }
-                break;
-
-            case 'contactMethod':
-                if (!formData.contactMethod) {
-                    errors.contactMethod = 'Please select a contact method';
-                } else {
-                    errors.contactMethod = '';
-                }
-                break;
-
-            case 'message':
-                if (!formData.message.trim()) {
-                    errors.message = 'Message is required';
-                } else if (formData.message.trim().length < 10) {
-                    errors.message = 'Message must be at least 10 characters';
-                } else {
-                    errors.message = '';
-                }
-                break;
+        const fieldData = { [field]: formData[field as keyof typeof formData] };
+        
+        try {
+            const schema = contactFormSchema.pick({
+                [field]: true
+            } as any);
+            schema.parse(fieldData);
+            clearFieldError(field as keyof typeof errors);
+        } catch (err) {
+            if (err instanceof z.ZodError && err.issues.length > 0) {
+                errors[field as keyof typeof errors] = err.issues[0]!.message;
+            }
         }
     };
 
     const validateForm = (): boolean => {
-        validateField('fullName');
-        validateField('email');
-        validateField('subject');
-        validateField('contactDate');
-        validateField('contactMethod');
-        validateField('message');
-
-        return !Object.values(errors).some(error => error !== '');
+        try {
+            contactFormSchema.parse(formData);
+            // Clear all errors on successful validation
+            Object.keys(errors).forEach(key => {
+                errors[key as keyof typeof errors] = '';
+            });
+            return true;
+        } catch (err) {
+            if (err instanceof z.ZodError) {
+                err.issues.forEach((error: z.ZodIssue) => {
+                    const fieldName = error.path[0] as keyof typeof errors;
+                    if (fieldName in errors) {
+                        errors[fieldName] = error.message;
+                    }
+                });
+            }
+            return false;
+        }
     };
 
     const handleSubmit = async () => {
@@ -260,5 +257,3 @@
         }
     };
 </script>
-
-<style scoped lang="less" src="./contact-form.less"></style>
