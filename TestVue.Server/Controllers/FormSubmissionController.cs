@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TestVue.Server.Services;
 using System.Text.Json;
-using TestVue.Server.Helper;
+using TestVue.Server.Services.FormSubmission;
 
 namespace TestVue.Server.Controllers
 {
@@ -30,15 +29,7 @@ namespace TestVue.Server.Controllers
         {
             try
             {
-                // Convert JsonElement to Dictionary
-                var dataDictionary = new Dictionary<string, object>();
-
-                foreach (var property in formData.EnumerateObject())
-                {
-                    dataDictionary[property.Name] = JsonHelper.ConvertJsonElement(property.Value);
-                }
-
-                var submissionId = await _formSubmissionService.SaveSubmissionAsync(dataDictionary);
+                var submissionId = await _formSubmissionService.AddAsync(formData);
 
                 _logger.LogInformation("Form submission created with ID: {SubmissionId}", submissionId);
 
@@ -59,7 +50,7 @@ namespace TestVue.Server.Controllers
         {
             try
             {
-                var submissions = await _formSubmissionService.GetAllSubmissionsAsync();
+                var submissions = await _formSubmissionService.GetAllAsync();
                 return Ok(submissions);
             }
             catch (Exception ex)
@@ -77,8 +68,7 @@ namespace TestVue.Server.Controllers
         {
             try
             {
-                var submission = await _formSubmissionService.GetSubmissionByIdAsync(id);
-
+                var submission = await _formSubmissionService.GetByIdAsync(id);
                 if (submission == null)
                 {
                     return NotFound(new { message = "Submission not found" });

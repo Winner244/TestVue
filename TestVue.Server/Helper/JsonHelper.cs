@@ -4,7 +4,17 @@ namespace TestVue.Server.Helper
 {
     public static class JsonHelper
     {
-        public static object ConvertJsonElement(JsonElement element)
+        public static Dictionary<string, object> ConvertJsonElementToDictionary(JsonElement element)
+        {
+            var dataDictionary = new Dictionary<string, object>();
+            foreach (var property in element.EnumerateObject())
+            {
+                dataDictionary[property.Name] = JsonHelper.ConvertJsonElement(property.Value);
+            }
+            return dataDictionary;
+        }
+
+        private static object ConvertJsonElement(JsonElement element)
         {
             return element.ValueKind switch
             {
