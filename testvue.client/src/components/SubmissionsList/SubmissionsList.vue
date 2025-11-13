@@ -66,12 +66,6 @@
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/css/index.css';
 
-    interface Submission {
-        id: string;
-        formData: Record<string, any>;
-        submittedAt: string;
-    }
-
     const searchQuery = ref('');
 
     // Use the submissions composable

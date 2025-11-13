@@ -19,7 +19,6 @@ export function useForm<T extends Record<string, any>>(
     const formData = reactive<T>({ ...initialData });
     const errors = reactive<Record<string, string>>({});
     const isSubmitting = ref(false);
-    const isDirty = ref(false);
 
     /**
      * Clear error for a specific field
@@ -87,7 +86,6 @@ export function useForm<T extends Record<string, any>>(
 
         try {
             await onSubmit(toRaw(formData) as T);
-            isDirty.value = false;
         } catch (error) {
             console.error('Error submitting form:', error);
             $toast.error('An error occurred. Please try again.', {
@@ -107,26 +105,16 @@ export function useForm<T extends Record<string, any>>(
         Object.keys(errors).forEach(key => {
             (errors as any)[key] = '';
         });
-        isDirty.value = false;
-    };
-
-    /**
-     * Mark form as dirty (modified)
-     */
-    const markDirty = () => {
-        isDirty.value = true;
     };
 
     return {
         formData,
         errors,
         isSubmitting,
-        isDirty,
         clearFieldError,
         validateField,
         validateForm,
         handleSubmit,
-        resetForm,
-        markDirty
+        resetForm
     };
 }

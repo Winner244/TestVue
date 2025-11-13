@@ -1,6 +1,4 @@
-# TestVue Client - Vue 3 + TypeScript + ASP.NET Core
-
-A modern, production-ready Vue 3 application demonstrating best practices in frontend development, built with TypeScript, Zod validation, and comprehensive testing.
+# Vue 3 + TypeScript + ASP.NET Core
 
 ## 🚀 Features
 
@@ -9,7 +7,6 @@ A modern, production-ready Vue 3 application demonstrating best practices in fro
 - ✅ **Zod Validation** - Runtime type-safe schema validation
 - ✅ **Accessibility** - WCAG compliant with ARIA labels and semantic HTML
 - ✅ **Testing** - Comprehensive test suite with Vitest and Vue Test Utils
-- ✅ **Performance Optimized** - Lazy loading, debouncing, and skeleton loaders
 - ✅ **BEM Methodology** - Maintainable and scalable CSS architecture
 - ✅ **Composables Pattern** - Reusable logic with custom composables
 - ✅ **Toast Notifications** - Non-intrusive user feedback
@@ -60,86 +57,6 @@ npm run test:ui      # Open Vitest UI for interactive testing
 npm run test:coverage # Generate coverage report
 ```
 
-## 📁 Project Structure
-
-```
-src/
-├── assets/styles/       # Global styles (Less with BEM)
-├── components/          # Vue components (co-located .vue + .less)
-│   ├── ContactForm/     # Multi-field form with validation
-│   ├── Header/          # Navigation header
-│   ├── SkeletonLoader/  # Loading placeholder component
-│   └── SubmissionsList/ # Data table with search
-├── composables/         # Reusable composition functions
-│   ├── useForm.ts       # Form management
-│   ├── useSubmissions.ts # Data fetching
-│   └── useDebounce.ts   # Debounce utility
-├── config/              # Configuration
-│   └── env.ts           # Environment variables
-├── constants/           # Application constants
-│   └── booleanDisplay.ts
-├── utils/               # Utility functions
-│   └── formatters.ts    # Data formatting
-├── tests/               # Test files
-├── App.vue              # Root component
-└── main.ts              # Entry point
-```
-
-## 🎨 Architecture Highlights
-
-### Component Organization
-- Co-located styles using BEM methodology
-- TypeScript for type safety
-- Proper props/emits typing
-
-### State Management
-- Reactive state with `ref()` and `reactive()`
-- Composables for shared logic
-- No global state library needed for this app size
-
-### Styling
-- **Less preprocessor** with BEM naming (Block__Element--Modifier)
-- Scoped styles per component
-- Global variables for consistency
-
-### Validation
-- **Zod schemas** for runtime validation
-- Type inference with `z.infer<typeof schema>`
-- Real-time error messages
-
-## 📦 Key Components
-
-### ContactForm
-Multi-field form with Zod validation, ARIA attributes, and toast notifications.
-
-### SubmissionsList
-Lazy-loaded data table with debounced search and skeleton loaders.
-
-### SkeletonLoader
-Reusable loading placeholder with animated shimmer effect.
-
-## 🔧 Composables
-
-- **`useForm`** - Form state, validation, and submission management
-- **`useSubmissions`** - Data fetching and management
-- **`useDebounce`** - Debounce reactive values
-
-## ♿ Accessibility
-
-- ARIA labels on all interactive elements
-- Semantic HTML (header, main, nav, article)
-- Live regions for dynamic content
-- Keyboard navigation support
-- Error associations with `aria-describedby`
-
-## 🧪 Testing
-
-40+ tests covering components, validation, filtering, and utilities.
-
-```bash
-npm test              # Run tests
-npm run test:coverage # Coverage report
-```
 
 ## 🌐 API Integration
 
@@ -156,7 +73,7 @@ API base URL configured via environment variables in `src/config/env.ts`.
 4. Composables for code reuse
 5. Lazy loading for performance
 6. Debouncing for optimization
-7. Skeleton loaders for UX
+7. loaders for UX
 8. WCAG accessibility compliance
 9. BEM CSS methodology
 10. Comprehensive testing
