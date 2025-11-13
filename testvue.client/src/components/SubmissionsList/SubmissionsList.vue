@@ -38,6 +38,7 @@
 
 <script setup lang="ts">
     import { ref, computed, onMounted } from 'vue';
+    import { useToast } from 'vue-toast-notification';
 
     interface Submission {
         id: string;
@@ -48,6 +49,8 @@
     const submissions = ref<Submission[]>([]);
     const searchQuery = ref('');
     const loading = ref(false);
+
+    const $toast = useToast();
 
     const filteredSubmissions = computed(() => {
         if (!searchQuery.value.trim()) {
@@ -83,10 +86,17 @@
             if (response.ok) {
                 submissions.value = await response.json();
             } else {
-                console.error('Failed to load submissions');
+                $toast.error('Failed to load submissions. Please try again.', {
+                    position: 'top',
+                    duration: 5000
+                });
             }
         } catch (error) {
             console.error('Error loading submissions:', error);
+            $toast.error('An error occurred while loading submissions. Please try again.', {
+                position: 'top',
+                duration: 5000
+            });
         } finally {
             loading.value = false;
         }

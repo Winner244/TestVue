@@ -2,10 +2,6 @@
     <div class="contact-form">
         <h2 class="contact-form__heading">Contact Form</h2>
         <form @submit.prevent="handleSubmit" class="contact-form__card">
-            <!-- Success Message -->
-            <div v-if="successMessage" class="contact-form__success-message">
-                {{ successMessage }}
-            </div>
 
             <!-- Text Field: Full Name -->
             <div class="contact-form__group">
@@ -119,6 +115,7 @@
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
     import { z } from 'zod';
+    import { useToast } from 'vue-toast-notification';
 
     // Zod schema for contact form validation
     const contactFormSchema = z.object({
@@ -150,6 +147,8 @@
 
     type ContactFormData = z.infer<typeof contactFormSchema>;
 
+    const $toast = useToast();
+
     const formData = reactive({
         fullName: '',
         email: '',
@@ -172,7 +171,6 @@
     });
 
     const isSubmitting = ref(false);
-    const successMessage = ref('');
 
     const clearFieldError = (field: keyof typeof errors) => {
         errors[field] = '';
@@ -221,7 +219,6 @@
         }
 
         isSubmitting.value = true;
-        successMessage.value = '';
 
         try {
             const response = await fetch('/api/formsubmission', {
@@ -233,7 +230,10 @@
             });
 
             if (response.ok) {
-                successMessage.value = 'Form submitted successfully!';
+                $toast.success('Form submitted successfully!', {
+                    position: 'top',
+                    duration: 5000
+                });
                 // Reset form
                 Object.assign(formData, {
                     fullName: '',
@@ -247,11 +247,17 @@
                     formType: 'contact'
                 });
             } else {
-                alert('Failed to submit form. Please try again.');
+                $toast.error('Failed to submit form. Please try again.', {
+                    position: 'top',
+                    duration: 5000
+                });
             }
         } catch (error) {
             console.error('Error submitting form:', error);
-            alert('An error occurred. Please try again.');
+            $toast.error('An error occurred. Please try again.', {
+                position: 'top',
+                duration: 5000
+            });
         } finally {
             isSubmitting.value = false;
         }
