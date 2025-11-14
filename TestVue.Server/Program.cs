@@ -91,7 +91,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 // Add error handling middleware (must be first)
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<ErrorMiddleware>();
 
 app.UseHttpsRedirection();
 

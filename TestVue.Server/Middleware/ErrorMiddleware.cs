@@ -6,15 +6,15 @@ namespace TestVue.Server.Middleware
     /// <summary>
     /// Middleware for global exception handling and error responses
     /// </summary>
-    public class ErrorHandlingMiddleware
+    public class ErrorMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
+        private readonly ILogger<ErrorMiddleware> _logger;
         private readonly IHostEnvironment _environment;
 
-        public ErrorHandlingMiddleware(
+        public ErrorMiddleware(
             RequestDelegate next,
-            ILogger<ErrorHandlingMiddleware> logger,
+            ILogger<ErrorMiddleware> logger,
             IHostEnvironment environment)
         {
             _next = next;
